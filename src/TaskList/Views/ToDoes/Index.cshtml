@@ -40,8 +40,6 @@
         var flag = event.target.checked;
         $(event.target).parent().parent().attr("slash", flag);
         //$(event.target).parent().parent(".Low[slash]").css("background-color", "#8ee9a").css("color", "rgba(0, 0, 0, 1)");
-        //$(event.target).parent().parent(".High").css("background-color", "rgba(120, 57, 57, 0.33)").css("color", "rgba(57, 57, 57, 0.70)");
-        //$(event.target).parent().parent(".High[slash]").css("background-color", "#cb8395").css("color", "rgba(0, 0, 0, 1)");
         $.ajax({
             url: '@Url.Action("Index", "ToDoes")?id=' + id,
             success: function (data) {
