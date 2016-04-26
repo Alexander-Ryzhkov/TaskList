@@ -1,0 +1,112 @@
+@model IEnumerable<TaskList.Models.ToDo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<style type="text/css">
+    tr.Low[slash=false] {
+        background-color: #8ee9ac;
+    }
+
+    tr.High[slash=false] {
+        background-color: #cb8395;
+    }
+    tr.High[slash=true] {
+       color: rgba(57, 57, 57, 0.70);
+       background-color: rgba(120, 57, 57, 0.33);
+    }
+    tr.Low[slash=true] {
+       color: rgba(57, 57, 57, 0.70);
+       background-color: rgba(57, 130, 70, 0.33);
+    }
+    /*input:checked:root:root {
+        color: rgba(57, 57, 57, 0.70);
+        background-color: rgba(57, 130, 70, 0.33);
+    }
+    tr.High > input:checked:root:root {
+        color: rgba(57, 57, 57, 0.70);
+       background-color: rgba(120, 57, 57, 0.33);
+    }*/
+</style>
+
+
+<script type="text/javascript">
+    function change(event, id)
+    {
+
+        //$(event.target).parent().parent(".Low").css("background-color", "rgba(57, 130, 70, 0.33)").css("color", "rgba(57, 57, 57, 0.70)");
+        var flag = event.target.checked;
+        $(event.target).parent().parent().attr("slash", flag);
+        //$(event.target).parent().parent(".Low[slash]").css("background-color", "#8ee9a").css("color", "rgba(0, 0, 0, 1)");
+        //$(event.target).parent().parent(".High").css("background-color", "rgba(120, 57, 57, 0.33)").css("color", "rgba(57, 57, 57, 0.70)");
+        //$(event.target).parent().parent(".High[slash]").css("background-color", "#cb8395").css("color", "rgba(0, 0, 0, 1)");
+        $.ajax({
+            url: '@Url.Action("Index", "ToDoes")?id=' + id,
+            success: function (data) {
+                alert();
+            }
+        });    
+    }
+</script>
+
+
+<p>
+    @*<a asp-action="Create">Create New</a>*@
+</p>
+    
+
+    @Html.Partial("PartialCreate", new TaskList.Models.ToDo())
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Deadline)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsCompleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Priority)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr class="@item.Priority" slash="@item.IsCompleted.ToString().ToLower()">
+        <td>
+            @Html.DisplayFor(modelItem => item.Deadline)
+        </td>
+        <td>
+            @if (item.IsCompleted)
+            {
+                <input checked="checked" class="check-box" type="checkbox" onclick="change(event, @item.ID)" />
+            }
+            else
+            {
+                <input class="check-box" type="checkbox" onclick="change(event, @item.ID)" />
+            }
+            @*@Html.DisplayFor(modelItem => item.IsCompleted)*@
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Priority)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+        </td>
+    </tr>
+}
+</table>
+
+<div>
+    <a asp-action="Sort">Sort</a>
+</div>
